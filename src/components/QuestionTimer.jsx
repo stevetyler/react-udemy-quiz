@@ -6,7 +6,7 @@ export default function QuestionTimer({ timeout, onTimeout }) {
     // only use useEffect if state is updated => inifinite loop
     useEffect(() => {  
         const timer = setTimeout(onTimeout, timeout);
-        console.log('timer started');
+        //console.log('timer started');
         return () => {
             clearTimeout(timer);
         }
