@@ -1,10 +1,9 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import QUESTIONS from "../questions.js";
 import quizCompleteImg from "../assets/quiz-complete.png"
-import QuestionTimer from "./QuestionTimer.jsx";
+import Question from "./Question.jsx";
 
 export default function Quiz() {
-    const shuffledAnswers = useRef(); // to prevent answers getting reshuffled when selecting an answer
     const [answerState, setAnswerState] = useState('')
     const [userAnswers, setUserAnswers] = useState([]);
     const activeQuestionIndex = 
@@ -36,42 +35,15 @@ export default function Quiz() {
         </div>
     }
 
-    if (!shuffledAnswers.current) {
-        shuffledAnswers.current = [...QUESTIONS[activeQuestionIndex].answers];
-        shuffledAnswers.current.sort(() => Math.random() - 0.5); // +ve and -ve answers to shuffle
-    }
-    
     return (
-        <div id="quiz">
-            <div id="question">
-                <QuestionTimer 
-                    timeout={10000} 
-                    onTimeout={handleSkipAnswer}
-                    key={activeQuestionIndex} // causes component to rerender when question changes
-                />
-                <h2>{QUESTIONS[activeQuestionIndex].text}</h2>
-                <ul id="answers">
-                    {shuffledAnswers.current.map((answer) => {
-                        const isSelected = userAnswers[userAnswers.length -1] === answer; // get last answer
-                        let className = '';
-                        
-                        if (answerState === 'answered' && isSelected) {
-                            className = 'selected';
-                        }
-                        if ((answerState === 'correct' || answerState === 'wrong') && isSelected) {
-                            className = answerState;
-                        }
-                        return (
-                            <li key={answer} className="answer">
-                                <button onClick={() => { handleSelectAnswer(answer) }} className={className}>
-                                    {answer}
-                                </button>
-                            </li>
-                        )
-                    })}
-                </ul>
-                
-            </div>
-        </div>
+        <Question 
+            key={activeQuestionIndex} // causes component to rerender when question changes
+            questionText={QUESTIONS[activeQuestionIndex].text}
+            answers={QUESTIONS[activeQuestionIndex].answers}
+            onSelectAnswer={handleSelectAnswer}
+            onSkipAnswer={handleSkipAnswer}
+            selectedAnswer={userAnswers[userAnswers.length - 1]}
+            answerState={answerState}
+        />
     )
 }
