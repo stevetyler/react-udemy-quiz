@@ -20,9 +20,10 @@ export default function Answers({answers, selectedAnswer, answerState, onSelect}
                 if ((answerState === 'correct' || answerState === 'wrong') && isSelected) {
                     className = answerState;
                 }
+                console.log('answerState ', answerState)
                 return (
                     <li key={answer} className="answer">
-                        <button onClick={() => onSelect(answer)} className={className}>
+                        <button onClick={() => onSelect(answer)} className={className} disabled={answerState !== ''}>
                             {answer}
                         </button>
                     </li>
