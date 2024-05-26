@@ -9,6 +9,15 @@ export default function Question({ activeQuestionIndex, onSelectAnswer, onSkipAn
         isCorrect: null
     });
 
+    let timer = 10000;
+
+    if (answer.selectedAnswer) {
+        timer = 1000;
+    }
+    if (answer.isCorrect !== null) {
+        timer = 2000
+    }
+    
     function handleSelectAnswer(answer) {
         setAnswer({
             selectedAnswer: answer,
@@ -23,10 +32,10 @@ export default function Question({ activeQuestionIndex, onSelectAnswer, onSkipAn
             setTimeout(() => {
                 onSelectAnswer(answer);
             }, 2000);
-        }, 2000)
+        }, 1000)
     }
 
-    const handleSkipAnswer = useCallback(() => handleSelectAnswer(null), [handleSelectAnswer]);
+    //const handleSkipAnswer = useCallback(() => handleSelectAnswer(null), [handleSelectAnswer]);
 
     let answerState = '';
 
@@ -40,8 +49,10 @@ export default function Question({ activeQuestionIndex, onSelectAnswer, onSkipAn
         <div id="quiz">
             <div id="question">
                 <QuestionTimer 
-                    timeout={10000} 
-                    onTimeout={handleSkipAnswer}
+                    key={timer}
+                    timeout={timer} 
+                    onTimeout={answer.selectedAnswer === '' ? onSkipAnswer : null}
+                    mode={answerState}
                 />
                 <h2>{QUESTIONS[activeQuestionIndex].text}</h2>
                 <Answers 
