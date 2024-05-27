@@ -35,8 +35,6 @@ export default function Question({ activeQuestionIndex, onSelectAnswer, onSkipAn
         }, 1000)
     }
 
-    //const handleSkipAnswer = useCallback(() => handleSelectAnswer(null), [handleSelectAnswer]);
-
     let answerState = '';
 
     if (answer.selectedAnswer && answer.isCorrect !== null) {
